@@ -60,18 +60,22 @@ exports.getCard = (req, res) => {
   room.find({}).then(data => {
     data.forEach(rm => {
       var playerTurn = searchTurn(req.body.name, rm.jugadores);
+      console.log(rm.jugadorEnTurno);
       console.log(playerTurn);
       if (rm.nombre === req.body.room && playerTurn === rm.jugadorEnTurno) {
         console.log(rm.cards.length);
         var arrCards = rm.jugadores[playerTurn].cartas;
         var elArr = rm.cards.pop();
         arrCards = arrCards.concat(elArr);
-        console.log(arrCards);
+        var tmpPlayers = rm.jugadores;
+        tmpPlayers[playerTurn].cartas = arrCards;
+
+        console.log(tmpPlayers);
         room.update(
           { nombre: req.body.room },
           {
             $set: {
-              "jugadores.playerTurn.cartas": arrCards,
+              jugadores: tmpPlayers,
               cards: rm.cards
             }
           },
@@ -81,7 +85,7 @@ exports.getCard = (req, res) => {
             else res.send("success");
           }
         );
-      } else res.send("error");
+      } else res.send("not player's turn");
     });
   });
 };
@@ -210,7 +214,7 @@ exports.startGame = (req, res) => {
       if (
         rm.nombre == req.body.room &&
         rm.jugadores.length > 1 &&
-        !rm.juegoEmpezado
+        rm.juegoEmpezado != 1
       ) {
         room.update(
           { nombre: req.body.room },
@@ -241,7 +245,7 @@ exports.joinRoom = (req, res) => {
         rm.nombre === req.body.room &&
         rm.jugadores.length < 5 &&
         !search(req.body.name, rm.jugadores) &&
-        !rm.juegoEmpezado
+        rm.juegoEmpezado != 1
       ) {
         var player = new jugador({
           nombre: req.body.name,
