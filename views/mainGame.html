@@ -4,7 +4,8 @@
 <head>
     <title>Ocho loco</title>
     <meta http-equiv="refresh" content="5" name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
     <style>
         .grid-container {
             display: grid;
@@ -47,17 +48,18 @@
             </div>
               
     </div>
-    
+    </br>
+    </br>
     <div class="row">
-        <div class="col">
+        <div class="col-sm-6" align="center">
                 <form action="passTurn" method="POST">  
-                    <button type="submit">Pasar</button>
+                    <button type="submit" class="btn btn-outline-success btn-lg">Pasar</button>
                 </form>
         </div>
+        <div class="col-sm-6" align="center">
             <form action="askCard" method="POST">  
-                <button type="submit">Robar carta</button>
+                <button type="submit" class="btn btn-outline-success btn-lg">Robar carta</button>
             </form>
-            
         </div>
     </div>
 
