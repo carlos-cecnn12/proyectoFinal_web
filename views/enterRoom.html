@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <title>Ocho loco</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <style>
+        .footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background-color: teal;
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="w3-container w3-teal">
+        <h1>Ocho loco</h1>
+
+    </div>
+    <div class="w3-container w3-red">
+        <h3>Create Room</h3>
+    </div>
+    <form action="createRoom" method="POST" class="w3-container">
+        <input class="w3-input" type="text" name="room" placeholder="Room name" />
+
+        <br>
+        <input class="w3-btn w3-red" type="submit" value="Submit" />
+    </form>
+    <br>
+    <div class="w3-container w3-red">
+        <h3>Enter Room</h3>
+    </div>
+    <form action="altaMarca" method="POST" class="w3-container">
+        <input class="w3-input" type="text" name="name" placeholder="Room name" />
+        <input class="w3-input" type="text" name="room" placeholder="Username" />
+        <br>
+        <input class="w3-btn w3-red" type="submit" value="Submit" />
+    </form>
+    <br>
+
+
+    <footer class="footer">
+
+        <p>Diseño de Aplicaciones Web</p>
+    </footer>
+
+</body>
+
+</html>

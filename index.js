@@ -16,12 +16,11 @@ var cors = require("cors");
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-    credentials: true
-  })
-);
+
+
+
+app.engine("html", require("ejs").renderFile);
+
 
 const db_url = "mongodb://localhost/dbRooms";
 mongoose.connect(db_url, { userNewUrlParser: true, useUnifiedTopology: true });
