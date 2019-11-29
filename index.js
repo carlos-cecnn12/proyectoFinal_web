@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-
+app.use( express.static('public'));
 app.engine("html", require("ejs").renderFile);
 
 

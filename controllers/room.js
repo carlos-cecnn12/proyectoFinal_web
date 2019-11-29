@@ -14,7 +14,7 @@ var cards = [
   "C10",
   "CJ",
   "CQ",
-  "CR",
+  "CK",
   "DA",
   "D2",
   "D3",
@@ -62,14 +62,24 @@ exports.secondScreen=(req,res)=>{
   res.render("waitingRoom.html")
 }
 
+exports.thirdScreen=(req,res)=>{
+  room.find({}).then(data=>{
+    data.forEach(rm=>{
+      if(rm.nombre===req.params.room){
+        res.render("mainGame.html", {info: rm})
+      }
+    })
+  })
+}
+
 
 exports.getCard = (req, res) => {
   room.find({}).then(data => {
     data.forEach(rm => {
-      var playerTurn = searchTurn(req.body.name, rm.jugadores);
+      var playerTurn = searchTurn(req.params.player, rm.jugadores);
 
       if (
-        rm.nombre === req.body.room &&
+        rm.nombre === req.params.room &&
         playerTurn === rm.jugadorEnTurno &&
         rm.cards.length > 0
       ) {
@@ -80,7 +90,7 @@ exports.getCard = (req, res) => {
         tmpPlayers[playerTurn].cartas = arrCards;
 
         room.update(
-          { nombre: req.body.room },
+          { nombre: req.params.room },
           {
             $set: {
               jugadores: tmpPlayers,
@@ -89,7 +99,7 @@ exports.getCard = (req, res) => {
           },
           function(err, up) {
             if (err) res.send("error");
-            else res.send("success");
+            else res.redirect(`/${req.params.room}/${req.params.player}/gameStarted`);
           }
         );
       } else res.send("not player's turn or no more cards on deck");
@@ -124,14 +134,13 @@ exports.getPlayerCards = (req, res) => {
 exports.passTurn = (req, res) => {
   room.find({}).then(data => {
     data.forEach(rm => {
-      var playerTurn = searchTurn(req.body.name, rm.jugadores);
-      if (rm.nombre === req.body.room && rm.jugadorEnTurno === playerTurn) {
+      var playerTurn = searchTurn(req.params.player, rm.jugadores);
+      if (rm.nombre === req.params.room && rm.jugadorEnTurno === playerTurn) {
         rm.jugadores.forEach(jugador => {
-          if (jugador.nombre === req.body.name) {
-            console.log(jugador.nombre);
-            console.log(req.body.name);
+          if (jugador.nombre === req.params.player) {
+
             room.updateOne(
-              { nombre: req.body.room },
+              { nombre: req.params.room },
               {
                 $set: {
                   jugadorEnTurno: (rm.jugadorEnTurno + 1) % 2
@@ -139,7 +148,7 @@ exports.passTurn = (req, res) => {
               },
               function(err, up) {
                 if (err) res.send("error");
-                else res.send("player turn skipped");
+                else res.redirect(`/${req.params.room}/${req.params.player}/gameStarted`);
               }
             );
           }
@@ -152,17 +161,17 @@ exports.passTurn = (req, res) => {
 exports.playCard = (req, res) => {
   room.find({}).then(data => {
     data.forEach(rm => {
-      var playerTurn = searchTurn(req.body.name, rm.jugadores);
+      var playerTurn = searchTurn(req.params.player, rm.jugadores);
       var nextTurn = (playerTurn + 1) % rm.jugadores.length;
       var arrCards = rm.jugadores[playerTurn].cartas;
-      if (rm.nombre === req.body.room && rm.juegoEmpezado) {
+      if (rm.nombre === req.params.room && rm.juegoEmpezado) {
         if (rm.jugadorEnTurno === playerTurn) {
           if (
             rm.cartaEnJuego.split("")[1] === 8 &&
             rm.cartaEnJuego.split("")[0] === req.body.card.split("")[0]
           ) {
             room.update(
-              { nombre: req.body.room },
+              { nombre: req.params.room },
               {
                 $set: {
                   cartaEnJuego: req.body.card,
@@ -177,13 +186,13 @@ exports.playCard = (req, res) => {
               function(err, up) {
                 console.log(up);
                 if (err) res.send("error");
-                else res.send("success");
+                else res.redirect(`/${req.params.room}/${req.params.player}/gameStarted`);
               }
             );
           } else {
             if (req.body.card.split("")[1] === 8) {
               room.update(
-                { nombre: req.body.room },
+                { nombre: req.params.room },
                 {
                   $set: {
                     cartaEnJuego: req.body.jokerCard,
@@ -198,7 +207,7 @@ exports.playCard = (req, res) => {
                 function(err, up) {
                   console.log(up);
                   if (err) res.send("error");
-                  else res.send("success");
+                  else res.redirect(`/${req.params.room}/${req.params.player}/gameStarted`);
                 }
               );
             } else {
@@ -207,7 +216,7 @@ exports.playCard = (req, res) => {
                 rm.cartaEnJuego.split("")[0] === req.body.card.split("")[0]
               ) {
                 room.update(
-                  { nombre: req.body.room, "jugadores.nombre": req.body.name },
+                  { nombre: req.params.room, "jugadores.nombre": req.params.player },
                   {
                     $set: {
                       cartaEnJuego: req.body.card,
@@ -219,7 +228,7 @@ exports.playCard = (req, res) => {
                   function(err, up) {
                     console.log(up);
                     if (err) res.send("error");
-                    else res.send("success");
+                    else res.redirect(`/${req.params.room}/${req.params.player}/gameStarted`);
                   }
                 );
               } else res.send("error");
@@ -232,6 +241,7 @@ exports.playCard = (req, res) => {
 };
 
 exports.createRoom = (req, res) => {
+  
   var mrc = new room({
     nombre: req.body.room,
     cards: shuffle(cards),
@@ -247,12 +257,12 @@ exports.startGame = (req, res) => {
   room.find({}).then(data => {
     data.forEach(rm => {
       if (
-        rm.nombre == req.body.room &&
+        rm.nombre == req.params.room &&
         rm.jugadores.length > 1 &&
         rm.juegoEmpezado != 1
       ) {
         room.update(
-          { nombre: req.body.room },
+          { nombre: req.params.room },
           {
             $set: {
               juegoEmpezado: 1,
@@ -265,10 +275,14 @@ exports.startGame = (req, res) => {
           function(err, up) {
             console.log(up);
             if (err) res.send("error");
-            else res.send("game started");
+            else res.redirect(`/${req.params.room}/${req.params.player}/gameStarted`);
           }
         );
-      } else res.send("there should be at least 2 players to begin the game");
+      } else if (
+        rm.nombre == req.params.room &&
+        rm.jugadores.length > 1 &&
+        rm.juegoEmpezado === 1
+      ) {res.redirect(`/${req.params.room}/${req.params.player}/gameStarted`)} else res.redirect(`/${req.params.room}/${req.params.player}`);
     });
   });
 };

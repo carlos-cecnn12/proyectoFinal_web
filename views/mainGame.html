@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <title>Ocho loco</title>
+    <meta http-equiv="refresh" content="5" name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <style>
+        .grid-container {
+            display: grid;
+            grid-template-columns: auto auto auto auto auto;
+        }
+        .footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background-color: teal;
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <div align="center">
+            <h1>Carta en juego</h1>
+            <img alt="<%=info.cartaEnJuego%>" width="150" height="180" src=<%= "/img/" + info.cartaEnJuego + ".png" %>>
+            <h2>Turno de: <%=info.jugadores[info.jugadorEnTurno].nombre%></h2>
+        </div>
+        <br>
+    </div>
+    <div align="center">
+            <div class="grid-container">  
+            <%info.jugadores[info.jugadorEnTurno].cartas.forEach((carta)=>{ %>
+                <div>
+                    <form action="playCard" method="POST"> 
+                         
+                        <button type="submit"  value="<%=carta%>">
+                                <input type="hidden" name="card" value="<%=carta%>"/>
+                                <img alt="Submit" width="150" height="180"  name="card" src=<%="/img/" +carta + ".png" %> >
+                        </button>
+                    </form> 
+                </div>
+                <%});%>
+            </div>
+              
+    </div>
+    
+    <div class="row">
+        <div class="col">
+                <form action="passTurn" method="POST">  
+                    <button type="submit">Pasar</button>
+                </form>
+        </div>
+            <form action="askCard" method="POST">  
+                <button type="submit">Robar carta</button>
+            </form>
+            
+        </div>
+    </div>
+
+</body>
+
+
+</html>
