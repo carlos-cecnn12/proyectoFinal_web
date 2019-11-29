@@ -55,6 +55,13 @@ var cards = [
   "TQ",
   "TK"
 ];
+exports.firstScreen=(req,res)=>{
+  res.render("enterRoom.html")
+}
+exports.secondScreen=(req,res)=>{
+  res.render("waitingRoom.html")
+}
+
 
 exports.getCard = (req, res) => {
   room.find({}).then(data => {
@@ -231,8 +238,8 @@ exports.createRoom = (req, res) => {
     juegoEmpezado: 0
   });
   mrc.save(err => {
-    if (err) res.send("error");
-    res.send("room created");
+    if (err) res.render("error.html");
+    res.render("enterRoom.html");
   });
 };
 
@@ -294,8 +301,8 @@ exports.joinRoom = (req, res) => {
                   $set: { cards: rm.cards }
                 },
                 function(err, up) {
-                  if (err) res.send("error");
-                  else res.send("welcome");
+                  if (err) res.render("error.html");
+                  else res.redirect(`${req.body.room}/${req.body.name}/`);
                 }
               );
             }

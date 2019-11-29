@@ -11,5 +11,6 @@ router.post("/playerCards", roomCon.getPlayerCards);
 router.post("/askCard", roomCon.getCard);
 router.post("/boardCard", roomCon.getPlayCard);
 router.post("/passTurn", roomCon.passTurn);
-
+router.get("/",roomCon.firstScreen)
+router.get("/:room/:player",roomCon.secondScreen)
 module.exports = router;

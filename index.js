@@ -27,7 +27,7 @@ mongoose.connect(db_url, { userNewUrlParser: true, useUnifiedTopology: true });
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 
-app.use("/room", roomRout);
+app.use("/", roomRout);
 db.on("error", console.error.bind(console, "Error en la conexión"));
 
 app.listen("8080", () => {
