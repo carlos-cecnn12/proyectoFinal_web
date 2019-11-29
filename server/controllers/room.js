@@ -61,7 +61,11 @@ exports.getCard = (req, res) => {
     data.forEach(rm => {
       var playerTurn = searchTurn(req.body.name, rm.jugadores);
 
-      if (rm.nombre === req.body.room && playerTurn === rm.jugadorEnTurno) {
+      if (
+        rm.nombre === req.body.room &&
+        playerTurn === rm.jugadorEnTurno &&
+        rm.cards.length > 0
+      ) {
         var arrCards = rm.jugadores[playerTurn].cartas;
         var elArr = rm.cards.pop();
         arrCards = arrCards.concat(elArr);
@@ -81,7 +85,7 @@ exports.getCard = (req, res) => {
             else res.send("success");
           }
         );
-      } else res.send("not player's turn");
+      } else res.send("not player's turn or no more cards on deck");
     });
   });
 };
