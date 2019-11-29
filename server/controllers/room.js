@@ -60,17 +60,14 @@ exports.getCard = (req, res) => {
   room.find({}).then(data => {
     data.forEach(rm => {
       var playerTurn = searchTurn(req.body.name, rm.jugadores);
-      console.log(rm.jugadorEnTurno);
-      console.log(playerTurn);
+
       if (rm.nombre === req.body.room && playerTurn === rm.jugadorEnTurno) {
-        console.log(rm.cards.length);
         var arrCards = rm.jugadores[playerTurn].cartas;
         var elArr = rm.cards.pop();
         arrCards = arrCards.concat(elArr);
         var tmpPlayers = rm.jugadores;
         tmpPlayers[playerTurn].cartas = arrCards;
 
-        console.log(tmpPlayers);
         room.update(
           { nombre: req.body.room },
           {
@@ -80,7 +77,6 @@ exports.getCard = (req, res) => {
             }
           },
           function(err, up) {
-            console.log(up);
             if (err) res.send("error");
             else res.send("success");
           }
@@ -107,6 +103,34 @@ exports.getPlayerCards = (req, res) => {
         rm.jugadores.forEach(jugador => {
           if (jugador.nombre === req.body.name) {
             res.send(jugador.cartas);
+          }
+        });
+      } else res.send("error");
+    });
+  });
+};
+
+exports.passTurn = (req, res) => {
+  room.find({}).then(data => {
+    data.forEach(rm => {
+      var playerTurn = searchTurn(req.body.name, rm.jugadores);
+      if (rm.nombre === req.body.room && rm.jugadorEnTurno === playerTurn) {
+        rm.jugadores.forEach(jugador => {
+          if (jugador.nombre === req.body.name) {
+            console.log(jugador.nombre);
+            console.log(req.body.name);
+            room.updateOne(
+              { nombre: req.body.room },
+              {
+                $set: {
+                  jugadorEnTurno: (rm.jugadorEnTurno + 1) % 2
+                }
+              },
+              function(err, up) {
+                if (err) res.send("error");
+                else res.send("player turn skipped");
+              }
+            );
           }
         });
       } else res.send("error");
