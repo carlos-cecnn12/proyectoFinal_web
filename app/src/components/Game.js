@@ -1,11 +1,13 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
 
 class Game extends Component {
-    constructor() {
-        super()
-        this.state = {
-            cardPlay: '',
-            cards: []
-        }
-    }
+  constructor() {
+    super();
+    this.state = {
+      cardPlay: "",
+      cards: [],
+      room: "",
+      name: ""
+    };
+  }
 }
