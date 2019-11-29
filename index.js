@@ -31,7 +31,6 @@ var db = mongoose.connection;
 app.use("/room", roomRout);
 db.on("error", console.error.bind(console, "Error en la conexión"));
 
-
 app.listen("8080", () => {
   console.log("server up");
 });
