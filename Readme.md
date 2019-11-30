@@ -1,4 +1,4 @@
-# Proyecto: 8 Loco.
+# Proyecto: 8 Loco
 
 ## Equipo:
 * A01373264 Carlos Emilio Carbajal Nogues.
@@ -18,10 +18,9 @@
 8. Hacer el mismo proceso para meter más jugadores en la sala.
 9. Una vez estando más de un jugador en la sala darle click al botón "Start Game"
 
-Una vez creada la sala los jugadores tendrán que seleccionar la carta que desea jugar. Para poder jugar una carta válida esta deberá ser del mismo palo o del mismo número y distinto palo. En caso de que el usuario seleccione una carta no válida tendrá que regresar a la página anterior para poder jugar una carta válida.
-
-Si el usuario no ve ningún cambio deberá de hacer refresh de la página para que se pueda continuar con el juego.
-
-En caso de que el jugador no cuente con una carta válida, éste tendrá que hacer click en el botón Robar Carta, una vez el maso de cartas se encuentre vacío el jugador tendrá que darle click al botón de Pasar para permitirle al siguiente jugador seleccionar la carta a jugar.
-
-En caso de que uno de los dos jugadores gane el jugador que perdió deberá de darle click en el botón "Salir".
+## Reglas del juego
+* Una vez creada la sala los jugadores tendrán que seleccionar la carta que desea jugar. Para poder jugar una carta válida esta deberá ser del mismo palo o del mismo número y distinto palo. En caso de que el usuario seleccione una carta no válida tendrá que regresar a la página anterior para poder jugar una carta válida.
+* Si el usuario no ve ningún cambio deberá de hacer refresh de la página para que se pueda continuar con el juego.
+* En caso de que el jugador no cuente con una carta válida, éste tendrá que hacer click en el botón Robar Carta, una vez el maso de cartas se encuentre vacío el jugador tendrá que darle click al botón de Pasar para permitirle al siguiente jugador seleccionar la carta a jugar.
+* En caso de que uno de los dos jugadores gane el jugador que perdió deberá de darle click en el botón "Salir".
+* Cuando la carta es un 8 se le debe de poner un input del palo que desea jugar. Recordando que los palos disponibles son Corazón, Diamante, Trebol, Picos. El input deberá ser en mayúscula como se muestra a continuación C, D, T, P.
