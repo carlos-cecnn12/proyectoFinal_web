@@ -1,12 +1,12 @@
-Proyecto: 8 Loco.
+# Proyecto: 8 Loco.
 
-Equipo:
+## Equipo:
 * A01373264 Carlos Emilio Carbajal Nogues.
 * A01373471 Marina Itzel Haro.
 * A01378565 Fabián Camp Mussa.
 * A01377824 Hugo Vázquez Reyes.
 
-Pasos para correr la aplicación:
+## Pasos para correr la aplicación:
 
 1. Abrir la terminal y ponerse al nivel del proyecto.
 2. En caso de no contar con mongo, instalar mongo.
