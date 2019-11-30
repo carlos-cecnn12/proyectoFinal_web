@@ -167,13 +167,43 @@ exports.passTurn = (req, res) => {
 
 exports.playCard = (req, res) => {
   room.find({}).then(data => {
+
     data.forEach(rm => {
       var playerTurn = searchTurn(req.params.player, rm.jugadores);
       var nextTurn = (playerTurn + 1) % rm.jugadores.length;
       var arrCards = rm.jugadores[playerTurn].cartas;
       if (rm.nombre === req.params.room && rm.juegoEmpezado) {
         if (rm.jugadorEnTurno === playerTurn) {
-          if (
+          if (req.body.card.split("")[1] == 8) {
+            var tmp = arrayRemove(
+              arrCards,
+              req.body.card)
+            var tmpPlayers = rm.jugadores
+            tmpPlayers[playerTurn].cartas=tmp
+            console.log()
+            console.log(tmp)
+            room.updateOne(
+              { nombre: req.params.room },
+              {
+                $set: {
+                  jugadores:tmpPlayers,
+                  cartaEnJuego: req.body.jokerCard,
+                  jugadorEnTurno: nextTurn,
+                  
+                  
+                }
+              },
+              { multi: true },
+              function(err, up) {
+                console.log(up);
+                if (err) res.send("error");
+                else {
+                  if (rm.jugadores[playerTurn].cartas.length===1){
+                    res.render("win.html")
+                  }else res.redirect(`/${req.params.room}/${req.params.player}/gameStarted`);
+                } }
+            );
+          } else if (
             rm.cartaEnJuego.split("")[1] === 8 &&
             rm.cartaEnJuego.split("")[0] === req.body.card.split("")[0]
           ) {
@@ -201,31 +231,7 @@ exports.playCard = (req, res) => {
                 } 
               }
             );
-          } else {
-            if (req.body.card.split("")[1] === 8) {
-              room.update(
-                { nombre: req.params.room },
-                {
-                  $set: {
-                    cartaEnJuego: req.body.jokerCard,
-                    jugadorEnTurno: nextTurn,
-                    "jugadores.playerTurn.cartas": arrayRemove(
-                      arrCards,
-                      req.body.card
-                    )
-                  }
-                },
-                { multi: true },
-                function(err, up) {
-                  console.log(up);
-                  if (err) res.send("error");
-                  else {
-                    if (rm.jugadores[playerTurn].cartas.length===1){
-                      res.render("win.html")
-                    }else res.redirect(`/${req.params.room}/${req.params.player}/gameStarted`);
-                  } }
-              );
-            } else {
+          } else  {
               if (
                 rm.cartaEnJuego.split("")[1] === req.body.card.split("")[1] ||
                 rm.cartaEnJuego.split("")[0] === req.body.card.split("")[0]
@@ -252,7 +258,7 @@ exports.playCard = (req, res) => {
                 );
               } else res.send("error");
             }
-          }
+          
         } else res.send("not player's turn");
       } else res.send("game not started or room doesn't exists");
     });

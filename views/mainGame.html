@@ -3,7 +3,7 @@
 
 <head>
     <title>Ocho loco</title>
-    <meta http-equiv="refresh" content="5" name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
+    <meta http-equiv="refresh" content="3" name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
     <style>
@@ -39,11 +39,18 @@
             <%data.cartas[0].forEach((carta)=>{ %>
                 <div>
                     <form action="playCard" method="POST"> 
-                         
+                        
+                            
                         <button type="submit"  value="<%=carta%>">
+                            
                                 <input type="hidden" name="card" value="<%=carta%>"/>
                                 <img alt="Submit" width="150" height="180"  name="card" src=<%="/img/" +carta + ".png" %> >
                         </button>
+                        <% if(carta.split("")[1]==8){%>
+                            <br>
+                            <input type="text" name="jokerCard" placeholder="Palo siguiente"/>
+                            <br>
+                        <%}%>
                     </form> 
                 </div>
                 <%});%>
