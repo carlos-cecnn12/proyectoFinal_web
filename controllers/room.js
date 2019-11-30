@@ -143,9 +143,9 @@ exports.passTurn = (req, res) => {
   room.find({}).then(data => {
     data.forEach(rm => {
       var playerTurn = searchTurn(req.params.player, rm.jugadores);
-      if (rm.nombre === req.params.room && rm.jugadorEnTurno === playerTurn) {
+      if (rm.nombre === req.params.room && rm.jugadorEnTurno === playerTurn && rm.cards.length===0) {
         rm.jugadores.forEach(jugador => {
-          if (jugador.nombre === req.params.player && rm.cards.length===0) {
+          if (jugador.nombre === req.params.player ) {
 
             room.updateOne(
               { nombre: req.params.room },
@@ -155,13 +155,12 @@ exports.passTurn = (req, res) => {
                 }
               },
               function(err, up) {
-                if (err) res.send("error");
-                else res.redirect(`/${req.params.room}/${req.params.player}/gameStarted`);
+                 res.redirect(`/${req.params.room}/${req.params.player}/gameStarted`);
               }
             );
-          }else res.redirect(`/${req.params.room}/${req.params.player}/gameStarted`);
+          } 
         });
-      } else res.send("error");
+      } else res.redirect(`/${req.params.room}/${req.params.player}/gameStarted`);
     });
   });
 };
@@ -194,7 +193,12 @@ exports.playCard = (req, res) => {
               function(err, up) {
                 console.log(up);
                 if (err) res.send("error");
-                else res.redirect(`/${req.params.room}/${req.params.player}/gameStarted`);
+                else{
+                  
+                  if (rm.jugadores[playerTurn].cartas.length===1){
+                    res.render("win.html")
+                  }else res.redirect(`/${req.params.room}/${req.params.player}/gameStarted`);
+                } 
               }
             );
           } else {
@@ -215,8 +219,11 @@ exports.playCard = (req, res) => {
                 function(err, up) {
                   console.log(up);
                   if (err) res.send("error");
-                  else res.redirect(`/${req.params.room}/${req.params.player}/gameStarted`);
-                }
+                  else {
+                    if (rm.jugadores[playerTurn].cartas.length===1){
+                      res.render("win.html")
+                    }else res.redirect(`/${req.params.room}/${req.params.player}/gameStarted`);
+                  } }
               );
             } else {
               if (
@@ -236,8 +243,12 @@ exports.playCard = (req, res) => {
                   function(err, up) {
                     console.log(up);
                     if (err) res.send("error");
-                    else res.redirect(`/${req.params.room}/${req.params.player}/gameStarted`);
-                  }
+                    else {
+                      console.log(rm.jugadores[playerTurn].cartas.length)
+                      if (rm.jugadores[playerTurn].cartas.length===1){
+                        res.render("win.html")
+                      }else res.redirect(`/${req.params.room}/${req.params.player}/gameStarted`);
+                    } }
                 );
               } else res.send("error");
             }
