@@ -23,3 +23,5 @@ Una vez creada la sala los jugadores tendrán que seleccionar la carta que desea
 Si el usuario no ve ningún cambio deberá de hacer refresh de la página para que se pueda continuar con el juego.
 
 En caso de que el jugador no cuente con una carta válida, éste tendrá que hacer click en el botón Robar Carta, una vez el maso de cartas se encuentre vacío el jugador tendrá que darle click al botón de Pasar para permitirle al siguiente jugador seleccionar la carta a jugar.
+
+En caso de que uno de los dos jugadores gane el jugador que perdió deberá de darle click en el botón "Salir".
