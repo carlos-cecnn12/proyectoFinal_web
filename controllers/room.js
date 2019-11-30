@@ -66,7 +66,15 @@ exports.thirdScreen=(req,res)=>{
   room.find({}).then(data=>{
     data.forEach(rm=>{
       if(rm.nombre===req.params.room){
-        res.render("mainGame.html", {info: rm})
+        var playerCards=[]
+        rm.jugadores.forEach(jugador=>{
+          if(jugador.nombre===req.params.player){
+            playerCards.push(jugador.cartas)
+          }
+        })
+        res.render("mainGame.html", {data:
+          {info: rm,
+          cartas: playerCards}})
       }
     })
   })
@@ -137,7 +145,7 @@ exports.passTurn = (req, res) => {
       var playerTurn = searchTurn(req.params.player, rm.jugadores);
       if (rm.nombre === req.params.room && rm.jugadorEnTurno === playerTurn) {
         rm.jugadores.forEach(jugador => {
-          if (jugador.nombre === req.params.player) {
+          if (jugador.nombre === req.params.player && rm.cards.length===0) {
 
             room.updateOne(
               { nombre: req.params.room },
@@ -151,7 +159,7 @@ exports.passTurn = (req, res) => {
                 else res.redirect(`/${req.params.room}/${req.params.player}/gameStarted`);
               }
             );
-          }
+          }else res.redirect(`/${req.params.room}/${req.params.player}/gameStarted`);
         });
       } else res.send("error");
     });
